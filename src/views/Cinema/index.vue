@@ -14,6 +14,9 @@
          </div>
        </div>
        <list></list>
+       <keep-alive>
+         <router-view />
+       </keep-alive>
      </div>
       <tab></tab>
     </div>
@@ -39,5 +42,5 @@
 </script>
 
 <style scoped lang="scss">
-  #content .cinema_menu{ width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
+  #content .cinema_menu{position: fixed;top:50px; width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
 </style>

@@ -4,25 +4,36 @@
       <div class="city_hot">
         <h2>热门城市</h2>
         <ul class="clearfix">
-          <li v-for="(hot,index) in hotList" :key="hot.id" >
+          <li v-for="(hot,index) in hotList" :key="hot.id">
             <span v-text="hot.nm"></span>
           </li>
         </ul>
       </div>
-      <div class="city_sort">
-        <mt-index-list >
-          <mt-index-section v-for="city in cityList" :key="city.index" :index="city.index">
-            <mt-cell class="mt_index" v-for="itemList in city.list " :key="itemList.id" :title="itemList.nm"></mt-cell>
-          </mt-index-section>
-        </mt-index-list>
+      <div class="city_sort" ref="citySort">
+        <div v-for="city in cityList" :key="city.index">
+          <h2 v-text="city.index"></h2>
+          <ul>
+            <li v-for="itemList in city.list " :key="itemList.id">
+              <span v-text="itemList.nm"></span>
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <div class="city_index">
+      <ul>
+        <li v-for="(item,index) in cityList" :key="item.index" @touchstart="handToIndex(index)">
+          <span v-text="item.index"></span>
+        </li>
+
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'citylist',
+    name: 'city',
     data(){
       return{
         cityList:[],
@@ -38,7 +49,7 @@
         if(msg === "ok"){
           let cities = response.data.data.cities;
           //console.log(cities);
-          let {cityList,hotList} =  this.fromCityList(cities );
+          let {cityList,hotList} =  this.fromCityList(cities);
           //返回值
           this.cityList = cityList;
           console.log(this.cityList);
@@ -57,10 +68,6 @@
           if(citys.isHot == 1){
             hotList.push(citys)
           }
-        }
-        for(let elem of cities ){
-          //console.log(index);
-          // console.log(elem);
         }
         //所有城市
         //for(let [index,elem] of new Map( cities.map( ( item, i ) => [ i, item ] ) )){
@@ -142,24 +149,20 @@
 <style scoped lang="scss">
   .clearfix:after{ content:""; display: block; clear:both;}
   ul li{list-style: none;color:#333;}
-  #content .city_body{ margin:96px 0 0; display: flex; width:100%; position: absolute; top: 0; bottom: 0;}
-  .city_body .city_list{ flex:1; overflow: auto; background: #FFF5F0;}
-  .city_body .city_list::-webkit-scrollbar {
-    background-color: transparent;
-    width: 0;
+  #content .city_body{  display: flex; width:100%; position: absolute; top: 0; bottom: 0;}
+  .city_body .city_list{margin-top:97px;width:100%; flex:1; overflow: auto; background: #FFF5F0;z-index:10; }
+  .city_body .city_list::-webkit-scrollbar{
+    background-color:transparent;
+    width:0;
   }
-    .city_body .city_sort{padding-bottom:46px;}
-  .city_body .city_sort .mt_index{background: #FFF5F0;}
-/*
   .city_body .city_hot{ margin-top: 20px;}
-*/.city_body .city_hot{padding-bottom:10px;}
   .city_body .city_hot h2{ padding-left: 15px; line-height: 30px; font-size: 14px; background:#F0F0F0; font-weight: normal;}
   .city_body .city_hot ul li{ float: left; background: #fff; width: 29%; height: 33px; margin-top: 15px; margin-left: 3%; padding: 0 4px; border: 1px solid #e6e6e6; border-radius: 3px; line-height: 33px; text-align: center; box-sizing: border-box;}
-  /*.city_body .city_sort div{ margin-top: 20px;}*/
+  .city_body .city_sort div{ margin-top: 20px;}
   .city_body .city_sort h2{ padding-left: 15px; line-height: 30px; font-size: 14px; background:#F0F0F0; font-weight: normal;}
   .city_body .city_sort ul{ padding-left: 10px; margin-top: 10px;}
   .city_body .city_sort ul li{ line-height: 30px;}
   .city_body .city_index{background:#fff; width:20px; display: flex; flex-direction:column; justify-content:center; text-align: center; border-left:1px #e6e6e6 solid;}
-
+  .city_body .city_index ul{/*float:right;*/}
 
 </style>

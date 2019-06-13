@@ -24,6 +24,16 @@ export default {
       component:() =>import("@/components/search")
     },
     {
+      path:'citylist',
+      name:"citylist",
+      component:()=>import("@/components/citylist/citylist.vue")
+    },
+    {
+      path:'indexlist',
+      name:"indexlist",
+      component:()=>import("@/components/citylist/listcity.vue")
+    },
+    {
       path:"/movie",
       redirect:'/movie/nowPlaying'
     }

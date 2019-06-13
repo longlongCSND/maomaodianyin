@@ -1,7 +1,7 @@
 <template>
     <div class="movie_body">
       <ul>
-         <li>
+         <!--<li>
             <div class="pic_show"><img src="/images/movie_1.jpg"></div>
             <div class="info_list">
                 <h2>无名之辈</h2>
@@ -12,6 +12,18 @@
             <div class="btn_pre">
                 预售
             </div>
+        </li>-->
+        <li v-for="(coming,index) in comingList" :key="coming.id">
+          <div class="pic_show"><img :src="coming.img | setWh('128.180')" :alt="coming.img"></div>
+          <div class="info_list">
+            <h2><span v-text="coming.nm"></span><img v-if="coming.version" src="@/assets/maxs.png" alt="图片"></h2>
+            <p><span class="person" v-text="coming.wish"></span> 人想看</p>
+            <p>主演: <span v-text="coming.star"></span></p>
+            <p> <span v-text="coming.rt"></span>上映</p>
+          </div>
+          <div class="btn_pre">
+            预售
+          </div>
         </li>
       </ul>
     </div>
@@ -20,6 +32,22 @@
 <script>
     export default {
         name: 'collect',
+        data(){
+          return{
+            comingList:[]
+          }
+        },
+        mounted(){
+          this.axios.get("/api/movieComingList?cityId=10")
+            .then((response)=>{
+                let msg = response.data.msg;
+                if(msg === "ok"){
+                  this.comingList = response.data.data.comingList;
+                }
+          })
+
+
+        },
         created() {
         },
         methods: {},
@@ -30,7 +58,7 @@
 
 <style scoped lang="scss">
   #content .movie_body{ flex:1; overflow:auto;}
-  .movie_body ul{ margin:0 12px; overflow: hidden;}
+  .movie_body ul{ margin:100px 12px; overflow: hidden;}
   .movie_body ul li{ margin-top:12px; display: flex; align-items:center; border-bottom: 1px #e6e6e6 solid; padding-bottom: 10px;}
   .movie_body .pic_show{ width:64px; height: 90px;}
   .movie_body .pic_show img{ width:100%;}
