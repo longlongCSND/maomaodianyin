@@ -1,6 +1,6 @@
 <template>
    <div id="main">
-      <topheader title="喵喵电影"></topheader>
+      <topheader title="喵喵影院"></topheader>
      <div id="content">
        <div class="cinema_menu">
          <div class="city_switch">
@@ -42,5 +42,6 @@
 </script>
 
 <style scoped lang="scss">
-  #content .cinema_menu{position: fixed;top:50px; width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
+
+  #content .cinema_menu{ width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
 </style>

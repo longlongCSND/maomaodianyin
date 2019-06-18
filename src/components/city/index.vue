@@ -1,22 +1,25 @@
 <template>
   <div class="city_body">
-    <div class="city_list">
-      <div class="city_hot">
-        <h2>热门城市</h2>
-        <ul class="clearfix">
-          <li v-for="(hot,index) in hotList" :key="hot.id" >
-            <span v-text="hot.nm"></span>
-          </li>
-        </ul>
+      <div class="city_list">
+        <loading v-if="isLoading"/>
+        <!--<scroller class="wrapper" v-else>-->
+        <div class="city_hot">
+          <h2>热门城市</h2>
+          <ul class="clearfix">
+            <li @touchstart="handleToCity(hot.nm,hot.id)" v-for="(hot,index) in hotList" :key="hot.id"  ><!--@tap="handleToCity(hot.nm,hot.id)"-->
+              <span v-text="hot.nm"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="city_sort">
+          <mt-index-list >
+            <mt-index-section v-for="city in cityList" :key="city.index" :index="city.index">
+              <mt-cell class="mt_index" @click.native="handleToCity(list.nm,list.id)" v-for="list in city.list "  :key="list.id" :title="list.nm"></mt-cell>
+            </mt-index-section>
+          </mt-index-list>
+        </div>
+      <!--  </scroller>-->
       </div>
-      <div class="city_sort">
-        <mt-index-list >
-          <mt-index-section v-for="city in cityList" :key="city.index" :index="city.index">
-            <mt-cell class="mt_index" v-for="itemList in city.list " :key="itemList.id" :title="itemList.nm"></mt-cell>
-          </mt-index-section>
-        </mt-index-list>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -26,26 +29,42 @@
     data(){
       return{
         cityList:[],
-        hotList:[]
+        hotList:[],
+        isLoading:true
       }
     },
     created() {
     },
     mounted(){
-      this.axios.get("/api/cityList").then((response) =>{
-        //console.log(response);
-        let msg = response.data.msg;
-        if(msg === "ok"){
-          let cities = response.data.data.cities;
-          //console.log(cities);
-          let {cityList,hotList} =  this.fromCityList(cities );
-          //返回值
-          this.cityList = cityList;
-          console.log(this.cityList);
-          this.hotList = hotList;
+      //取本地存储数据
+      let cityList = window.localStorage.getItem("cityList",JSON.stringify(cityList));
+      let hotList = window.localStorage.getItem("hotList",JSON.stringify(hotList));
+      if(cityList && hotList){
+        this.cityList = JSON.parse(cityList);//解析字符串
+        this.hotList = JSON.parse(hotList);
+        //数据加载完成loading隐藏
+        this.isLoading = false;
+      }else{
+        this.axios.get("/api/cityList").then((response) =>{
+          //console.log(response);
+          let msg = response.data.msg;
+          if(msg === "ok"){
+            let cities = response.data.data.cities;
+            //数据加载完成loading隐藏
+            this.isLoading = false;
+            //console.log(cities);
+            let {cityList,hotList} =  this.fromCityList(cities );
+            //返回值
+            this.cityList = cityList;
+            this.hotList = hotList;
+            //H5本地存储数据
+            window.localStorage.setItem("cityList",JSON.stringify(cityList));//转换为字符串
+            window.localStorage.setItem("hotLIst",JSON.stringify(hotList))
 
-        }
-      })
+          }
+        })
+      }
+
     },
     methods: {
       fromCityList(cities){
@@ -130,8 +149,15 @@
         //let parents = this.$refs.citySort.parentNode;
         console.log(index)
         this.$refs.citySort.parentNode.scrollTop = h[index].offsetTop;//获取city_list的高度
-
-
+      },
+      //获取行对应的城市
+      handleToCity(nm,id){
+        //alert(1)
+        this.$store.commit('city/CITY_INFO',{nm,id});
+        //本地存储
+        window.localStorage.setItem("nowNm",nm);
+        window.localStorage.setItem('nowId',id);
+        this.$router.push("/movie/nowplaying");//跳转到正在热影
       }
     },
     computed: {},
@@ -140,19 +166,22 @@
 </script>
 
 <style scoped lang="scss">
+  /*.wrapper{height:40%;}*/
+
+ /* * { touch-action: pan-y; }*/
   .clearfix:after{ content:""; display: block; clear:both;}
   ul li{list-style: none;color:#333;}
-  #content .city_body{ margin:96px 0 0; display: flex; width:100%; position: absolute; top: 0; bottom: 0;}
-  .city_body .city_list{ flex:1; overflow: auto; background: #FFF5F0;}
+  #content .city_body{ margin:46px 0 0; display: flex; width:100%; position: absolute; top: 0; bottom: 0;}
+  .city_body .city_list{ flex:1; overflow: auto; background: #FFF5F0;padding-bottom:46px;}
   .city_body .city_list::-webkit-scrollbar {
     background-color: transparent;
     width: 0;
   }
-    .city_body .city_sort{padding-bottom:46px;}
+    .city_body .city_sort{}
   .city_body .city_sort .mt_index{background: #FFF5F0;}
 /*
-  .city_body .city_hot{ margin-top: 20px;}
-*/.city_body .city_hot{padding-bottom:10px;}
+  .city_body .city_hot{ margin-top: 20px;}*/
+ .city_body .city_hot{padding-bottom:20px;}
   .city_body .city_hot h2{ padding-left: 15px; line-height: 30px; font-size: 14px; background:#F0F0F0; font-weight: normal;}
   .city_body .city_hot ul li{ float: left; background: #fff; width: 29%; height: 33px; margin-top: 15px; margin-left: 3%; padding: 0 4px; border: 1px solid #e6e6e6; border-radius: 3px; line-height: 33px; text-align: center; box-sizing: border-box;}
   /*.city_body .city_sort div{ margin-top: 20px;}*/

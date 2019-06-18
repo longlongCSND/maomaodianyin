@@ -10,7 +10,7 @@ export default {
     },
     {
       path:'nowPlaying',
-      name:'nowplaying',
+      //name:'nowplaying',
       component:() =>import("@/components/nowPlaying")
     },
     {
@@ -34,7 +34,7 @@ export default {
       component:()=>import("@/components/citylist/listcity.vue")
     },
     {
-      path:"/movie",
+      path:'/movie',
       redirect:'/movie/nowPlaying'
     }
   ]
