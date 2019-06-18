@@ -59,8 +59,11 @@
           },1000)*/
             //axios请求频繁时取消上一次请求
             let that = this;
+            let cityId = this.$store.state.city.id;//获取城市id
             this.cancelRequest();
-            this.axios.get("/api/searchList?cityId=10&kw=" + newVal, {
+            //this.axios.get("/api/searchList?cityId=10&kw=" + newVal, {
+            this.axios.get('/api/searchList?cityId='+cityId+'&kw=' + newVal, {
+
               cancelToken:new this.axios.CancelToken(function(c) {
                 console.log(111);
                 that.source = c;
@@ -98,7 +101,7 @@
 <style scoped lang="scss">
 span{display:inline-block;justify-content:flex-start;}
 #content .search_body{ flex:1; overflow:auto;}
-.search_body .search_input{margin-top:96px; padding: 8px 10px; background-color: #f5f5f5; border-bottom: 1px solid #e5e5e5;}
+.search_body .search_input{/*margin-top:96px;*/ padding: 8px 10px; background-color: #f5f5f5; border-bottom: 1px solid #e5e5e5;}
 .search_body .search_input_wrapper{ padding: 0 10px; border: 1px solid #e6e6e6; border-radius: 5px; background-color: #fff; display: flex; line-height: 20px;}
 .search_body .search_input_wrapper i{font-size: 16px; padding: 4px 0;}
 .search_body .search_input_wrapper input{ border: none; font-size: 13px; color: #333; padding: 4px 0; outline: none; margin-left: 5px; width:100%;}

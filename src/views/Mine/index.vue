@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-      <topheader title="喵喵电影"></topheader>
+      <topheader title="我的喵喵"></topheader>
       <div id="content">
         <Login />
       </div>
@@ -26,6 +26,6 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 
 </style>

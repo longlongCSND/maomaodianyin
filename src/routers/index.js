@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import movieRotuer from './Movie'
-import mineRotuer from './Mine'
-import cinemaRotuer from './Cinema'
+import movieRouter from './movie'
+import mineRouter from './mine'
+import cinemaRouter from './cinema'
 
 Vue.use(Router)
 
@@ -10,12 +10,12 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    movieRotuer,
-    mineRotuer,
-    cinemaRotuer,
+    movieRouter,
+    mineRouter,
+    cinemaRouter,
     {
-      path:'/*',
-      redirect:'/movie'
+      path : '/*',
+      redirect : '/movie'
     }
   ]
 })
